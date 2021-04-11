@@ -1,7 +1,6 @@
 package one.digitalinnovation.beerstock.filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,9 +12,8 @@ import java.io.IOException;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class LoggingFilter extends OncePerRequestFilter {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -27,13 +25,13 @@ public class LoggingFilter extends OncePerRequestFilter {
         String urlWithParameters = getURLWithParameters(request);
 
         invokingLog = formatInvokingLog(urlWithParameters);
-        LOGGER.info(invokingLog);
+        log.info(invokingLog);
 
         filterChain.doFilter(request, response);
 
         endTime = System.currentTimeMillis() - startTime;
         executedLog = formatExecutedLog(urlWithParameters, endTime);
-        LOGGER.info(executedLog);
+        log.info(executedLog);
     }
 
     private String getURLWithParameters(HttpServletRequest request) {
